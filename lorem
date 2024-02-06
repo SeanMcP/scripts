@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+
+import random
+import argparse
+
+VERSION = "1.0.0"
+
+parser = argparse.ArgumentParser(description="Print lorem ipsum")
+parser.add_argument("-v", "--version", action="version", version=f"lorem {VERSION}", help="print version and exit")
+parser.add_argument("count", nargs="?", default=1, type=int, help="number of sentences to generate (default: 1)")
+
+args = parser.parse_args()
+count = args.count
+
+intro = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+
+lorem = [
+    'Aenean vel pulvinar arcu.', 
+    'Nunc sodales dui diam, ultrices luctus purus euismod id.', 
+    'Etiam elementum urna pulvinar dui ultricies, sed tempor diam elementum.', 
+    'Sed eget arcu arcu.', 
+    'Praesent massa nunc, tempus et quam non, hendrerit hendrerit justo.', 
+    'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.', 
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 
+    'Proin in risus eleifend, efficitur lorem non, auctor ligula.', 
+    'Aliquam finibus neque quis malesuada rutrum.', 
+    'Nulla convallis ligula in dolor posuere pharetra.', 
+    'Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.', 
+    'Nunc sodales mauris magna, ac faucibus ante vehicula eget.', 
+    'Curabitur porta ornare neque sit amet tincidunt.', 
+    'Mauris quis nisi maximus, luctus est at, feugiat odio.',
+    'Mauris condimentum dapibus malesuada.', 
+    'Morbi quis felis facilisis, consequat mauris non, condimentum nunc.', 
+    'Praesent imperdiet malesuada risus, id consectetur ipsum cursus id.', 
+    'Integer lacus orci, congue ut convallis quis, mattis ut lectus.', 
+    'Nam viverra velit quis interdum blandit.', 
+    'Curabitur arcu mi, gravida ac placerat non, rhoncus non metus.', 
+    'Ut ut pharetra dolor, in ultrices leo.', 
+    'Nullam at neque vitae leo luctus convallis dapibus id orci.', 
+    'Nullam porta maximus libero, vel viverra sem imperdiet blandit.',
+    'Donec malesuada purus lectus, ut maximus ante auctor ac.', 
+    'Ut interdum luctus lorem, eget fermentum mi dictum quis.', 
+    'Aenean nulla dolor, consectetur molestie interdum eget, convallis a est.', 
+    'Ut eget ligula finibus, varius nulla eget, fringilla arcu.', 
+    'Suspendisse potenti.', 
+    'Etiam massa ex, bibendum et luctus in, iaculis sed quam.', 
+    'Ut nec nibh sit amet nulla vulputate facilisis eget et est.', 
+    'Maecenas tristique, dui in blandit sagittis, leo odio tempus ipsum, congue pulvinar sem felis vel elit.', 
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 
+    'Aenean metus nisi, blandit at mollis sed, sollicitudin eu nisi.', 
+    'Nulla a leo vel lorem aliquam convallis.', 
+    'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.', 
+    'Sed id aliquet neque, vitae luctus enim.', 
+    'Duis vel libero dolor.',
+    'Vivamus sit amet ligula vitae nisl sollicitudin mattis in a diam.', 
+    'Nullam accumsan, massa in varius placerat, enim arcu sagittis est, in accumsan nisi tellus quis quam.', 
+    'Quisque porttitor erat pretium elit porttitor porttitor.', 
+    'Proin lorem leo, feugiat quis pellentesque vitae, laoreet eget nisl.', 
+    'Donec dapibus ultricies nisi eget bibendum.', 
+    'Quisque lectus ante, tincidunt eget efficitur ac, egestas non ex.', 
+    'In vestibulum, turpis ornare fringilla posuere, dui felis consequat eros, scelerisque efficitur metus magna in nibh.', 
+    'Sed luctus feugiat metus non vestibulum.',
+    'Nulla rutrum urna id magna pharetra, eu suscipit diam pretium.', 
+    'Pellentesque faucibus sem quis viverra scelerisque.', 
+    'Cras posuere dictum diam, et efficitur nulla cursus a.', 
+    'Nunc sodales fringilla enim, vitae malesuada nunc pharetra sed.', 
+    'Phasellus porta semper turpis et gravida.', 
+    'Duis id vestibulum nisi.', 
+    'Quisque mauris lacus, egestas in tincidunt eget, aliquam sed elit.', 
+    'Etiam a est risus.', 
+    'Donec condimentum turpis sed massa vestibulum mollis.', 
+    'Ut ultricies, purus vitae congue semper, dolor est euismod ligula, vitae euismod erat velit nec augue.', 
+    'Nulla gravida ipsum in lorem cursus, eget euismod ante porttitor.', 
+    'In fringilla sapien a elit rutrum, non volutpat lacus molestie.', 
+    'In luctus felis ex, sit amet molestie velit lacinia ut.', 
+    'Suspendisse volutpat quis mauris ac pretium.', 
+    'Vivamus iaculis turpis sed libero dictum vestibulum.'
+]
+
+def shuffled(lorem):
+    temp = lorem[:]
+    random.shuffle(temp)
+    return temp
+
+if count < 1:
+    print("Count must be a positive integer")
+    raise SystemExit(1)
+elif count == 1:
+    print(intro)
+elif count > 1000:
+    print("Count must be less than 1000")
+    raise SystemExit(1)
+else:
+    temp = shuffled(lorem)
+    while count > len(temp):
+        print(f"{count} > {len(temp)}")
+        temp += shuffled(lorem)
+    print(f"{intro} {' '.join(temp[:count - 1])}".strip())
