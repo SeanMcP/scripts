@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+import argparse
+import json
+
+VERSION = "1.0.0"
+
+parser = argparse.ArgumentParser(description="Read package.json")
+parser.add_argument("dir", nargs="?", default=".", help="directory of package.json (default: .)")
+parser.add_argument("key", nargs="?", default="scripts", help="key to look up in package.json (default: scripts)")
+parser.add_argument("-v", "--version", action="version", version=f"rpj {VERSION}", help="print version and exit")
+parser.add_argument("--debug", action="store_true", help="print debug info")
+
+args = parser.parse_args()
+
+key = args.key
+dir = args.dir
+debug_mode = args.debug
+
+alias_lookup = {
+    'd': "dependencies",
+    'dd': "devDependencies",
+    'l': "license",
+    'pd': "peerDependencies",
+    'v': "version",
+}
+
+def debug(*args):
+    if debug_mode:
+        print("🪲:", *args)
+
+if key in alias_lookup:
+    debug(f"Using alias `{key}` for `{alias_lookup[key]}`")
+    key = alias_lookup[key]
+
+if not dir.endswith("/"):
+    debug(f"Adding trailing slash to directory `{dir}`")
+    dir += "/"
+filepath = dir + "package.json"
+
+debug(f"Reading {filepath} for key `{key}`")
+
+try:
+    with open(filepath, "r") as file:
+        data = file.read()
+        if not data:
+            print(f"No data found in {filepath}")
+            raise SystemExit(1)
+        try:
+            data = json.loads(data)
+        except:
+            print(f"Invalid JSON in {filepath}")
+            raise SystemExit(1)
+        if key not in data:
+            print(f"No key `{key}` found in {filepath}")
+            raise SystemExit(1)
+        print(json.dumps(data[key], indent=2))
+except FileNotFoundError:
+    print(f"No package.json found in directory `{dir}`")
